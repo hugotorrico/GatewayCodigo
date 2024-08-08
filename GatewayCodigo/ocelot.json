@@ -28,6 +28,19 @@
       "UpstreamPathTemplate": "/gateway/customers",
       "UpstreamHttpMethod": [ "Get" ],
       "Key": "GetCustomers"
+    },
+    {
+      "DownstreamPathTemplate": "/api/categories",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7217
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/categories",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "GetCategories"
     }
   ],
   "Aggregates": [
@@ -39,8 +52,7 @@
       "UpstreamPathTemplate": "/aggregate/all",
       "UpstreamHttpMethod": [ "Get" ],
       "Aggregator": "SimpleAggregator"
-    }
-    ,
+    },
     {
       "RouteKeys": [
         "GetProducts",
@@ -49,6 +61,15 @@
       "UpstreamPathTemplate": "/aggregate/demo",
       "UpstreamHttpMethod": [ "Get" ],
       "Aggregator": "DemoAggregator"
+    },
+    {
+      "RouteKeys": [
+        "GetProducts",
+        "GetCategories"
+      ],
+      "UpstreamPathTemplate": "/aggregate/test",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Aggregator": "TestAggregator"
     }
   ]
 }

@@ -6,35 +6,35 @@ using System.Collections.Generic;
 
 namespace GatewayCodigo
 {
-    public class DemoAggregator : IDefinedAggregator
+    public class TestAggregator : IDefinedAggregator
     {
         public async Task<DownstreamResponse> Aggregate(List<HttpContext> responses)
         {
 
             //La información aquí llega en un json
             var productsContent = await responses[0].Items.DownstreamResponse().Content.ReadAsStringAsync();
-            var customersContent = await responses[1].Items.DownstreamResponse().Content.ReadAsStringAsync();
+            var categoriesContent = await responses[1].Items.DownstreamResponse().Content.ReadAsStringAsync();
 
             //Mis listas de objetos
             List<Product>? products = null;
-            List<Customer>? customers = null;
+            List<Category>? categories = null;
 
 
             //Convertir de json=>lista de objetos
             products = JsonConvert.DeserializeObject<List< Product >  >(productsContent);
-            customers = JsonConvert.DeserializeObject<List<Customer>>(customersContent);
+            categories = JsonConvert.DeserializeObject<List<Category>>(categoriesContent);
 
 
             //Usar join de linq con expresiones lambda
            var productWithCustomers = products.Join(
-           customers,
-           product => product.CustomerId,
-           customer => customer.Id,
-           (product, customer) => new ProductWithCustomer
+           categories,
+           product => product.CategoryId,
+           category => category.Id,
+           (product, category) => new ProductWithCategory
            {
                ProductId = product.Id,
                ProductName = product.Name,
-               CustomerName = customer.FirstName
+               CategoryName = category.Description
            }).ToList();
 
             //Convertir de lista de objetos=>json
