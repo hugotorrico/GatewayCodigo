@@ -1,0 +1,54 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7140"
+  },
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/products",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7217
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/products",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "GetProducts"
+    },
+    {
+      "DownstreamPathTemplate": "/api/customers",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7217
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/customers",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "GetCustomers"
+    }
+  ],
+  "Aggregates": [
+    {
+      "RouteKeys": [
+        "GetProducts",
+        "GetCustomers"
+      ],
+      "UpstreamPathTemplate": "/aggregate/all",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Aggregator": "SimpleAggregator"
+    }
+    ,
+    {
+      "RouteKeys": [
+        "GetProducts",
+        "GetCustomers"
+      ],
+      "UpstreamPathTemplate": "/aggregate/demo",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Aggregator": "DemoAggregator"
+    }
+  ]
+}
