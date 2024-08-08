@@ -16,7 +16,9 @@ builder.Configuration.AddJsonFile("ocelot.json");
 builder.Services.AddOcelot().
     AddTransientDefinedAggregator<SimpleAggregator>()
     .AddTransientDefinedAggregator<DemoAggregator>()
-    .AddTransientDefinedAggregator<TestAggregator>();
+    .AddTransientDefinedAggregator<TestAggregator>()
+    .AddTransientDefinedAggregator<FinalAggregator>()
+    ;
 
 
 var app = builder.Build();

@@ -70,6 +70,16 @@
       "UpstreamPathTemplate": "/aggregate/test",
       "UpstreamHttpMethod": [ "Get" ],
       "Aggregator": "TestAggregator"
+    },
+    {
+      "RouteKeys": [
+        "GetProducts",
+        "GetCategories",
+        "GetCustomers"
+      ],
+      "UpstreamPathTemplate": "/aggregate/final",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Aggregator": "FinalAggregator"
     }
   ]
 }
