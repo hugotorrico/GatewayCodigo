@@ -10,19 +10,35 @@ namespace GatewayCodigo
     {
         public async Task<DownstreamResponse> Aggregate(List<HttpContext> responses)
         {
-            var productContent = await responses[0].Items.DownstreamResponse().Content.ReadAsStringAsync();
-            var customerContent = await responses[1].Items.DownstreamResponse().Content.ReadAsStringAsync();
+
+            //La información aquí llega en un json
+            var productsContent = await responses[0].Items.DownstreamResponse().Content.ReadAsStringAsync();
+            var customersContent = await responses[1].Items.DownstreamResponse().Content.ReadAsStringAsync();
+
+            //Mis listas de objetos
+            List<Product>? products = null;
+            List<Customer>? customers = null;
 
 
-            ICollection<Product>? products = null;
-            ICollection<Customer>? customers = null;
-
-            products = JsonConvert.DeserializeObject< ICollection < Product >  >(productContent);
-
-            customers = JsonConvert.DeserializeObject<ICollection<Customer>>(customerContent);
+            //Convertir de json=>lista de objetos
+            products = JsonConvert.DeserializeObject<List< Product >  >(productsContent);
+            customers = JsonConvert.DeserializeObject<List<Customer>>(customersContent);
 
 
-            var combinedContent = $"[Products: {productContent}, Customers: {customerContent}]";
+            //Usar join de linq con expresiones lambda
+           var productWithCustomers = products.Join(
+           customers,
+           product => product.CustomerId,
+           customer => customer.Id,
+           (product, customer) => new ProductWithCustomer
+           {
+               ProductId = product.Id,
+               ProductName = product.Name,
+               CustomerName = customer.FirstName
+           }).ToList();
+
+
+            var combinedContent = $"[Products: {productsContent}, Customers: {customersContent}]";
 
             var stringContent = new StringContent(combinedContent);
             return new DownstreamResponse(stringContent, System.Net.HttpStatusCode.OK, new List<KeyValuePair<string, IEnumerable<string>>>(), "application/json");
